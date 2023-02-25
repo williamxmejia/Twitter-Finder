@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include './partials/head.html' %}
+  </head>
+  <body>
+    <ul>
+      {% for tweet in data %}
+      <li>{{ tweet }}</li>
+      {% endfor %} {% include './partials/scripts.html' %}
+    </ul>
+  </body>
+</html>
