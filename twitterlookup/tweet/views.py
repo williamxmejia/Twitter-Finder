@@ -32,14 +32,6 @@ def search(x):
     return tweets
 
 def index(request):
-    # response_API = requests.get('https://api.covid19india.org/state_district_wise.json')
-    # data = response_API.text
-    # json.loads(data)
-    # parse_json = json.loads(data)
-    # active_case = parse_json['Andaman and Nicobar Islands']['districtData']['South Andaman']['active']
-    # a = 2 + 2
-    # b = "Tweet info"
-    # context = {"result": a, "tweet": b, "cases": active_case}
     return render(request, 'index.html')
 
 def get_name(request):
@@ -47,8 +39,11 @@ def get_name(request):
         form = NameForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get("your_name")
-            context={'data': search(username)}
-            print(username)
+            use = api.get_user(screen_name=username)
+            user_tweets = client.get_users_tweets(id=use._json['id'], max_results=100)
+
+            context={'data': search(username), 'tweets': user_tweets.data}
+            print(user_tweets)
     else:
         form = NameForm()
 
