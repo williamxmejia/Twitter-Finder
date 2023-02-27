@@ -7,6 +7,7 @@ import tweepy
 import os 
 from dotenv import load_dotenv
 from .forms import NameForm
+from django.core.paginator import Paginator
 
 load_dotenv()
 
@@ -42,8 +43,21 @@ def get_name(request):
             use = api.get_user(screen_name=username)
             user_tweets = client.get_users_tweets(id=use._json['id'], max_results=100)
 
-            context={'data': search(username), 'tweets': user_tweets.data}
-            print(user_tweets)
+            # tt = user_tweets[0][1]
+            # print(tt)
+            arr = []
+            nums = []
+            anchor = [None] * 100
+            for i, t in enumerate(user_tweets[0]):
+                check = t.text.split()
+                for c in check:
+                    if 'https' in c:
+                        anchor[i] = c
+                        nums.append(i + 1)
+                        print(c)
+                arr.append(" ".join(check))
+
+            context={'data': search(username), 'tweets': arr, 'data': anchor}
     else:
         form = NameForm()
 
